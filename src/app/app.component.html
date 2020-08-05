@@ -17,7 +17,7 @@
         <td><i class='fas fa-caret-up' (click)="upVote(i)" style='font-size:14px;color: grey;'></i></td>
         <td><strong>{{ item.title }}</strong> <span *ngIf="item?.url"> (</span><a *ngIf="item?.url" target="_blank"
             href="{{item.url}}">{{item.url}}</a><span *ngIf="item?.url">)</span> <span> by </span>
-          <strong>{{item.author}}</strong> <span> {{item.created_at}} </span> <span (click)="hideRow(i)"
+          <strong>{{item.author}}</strong> <span> {{calculateDiffHours(item.created_at)}} hours ago </span> <span (click)="hideRow(i)"
             style="cursor: pointer;">[ hide ]</span></td>
       </tr>
     </tbody>

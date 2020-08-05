@@ -31,6 +31,11 @@ export class AppComponent implements OnInit {
     this.loadData(this.pageNum);
   }
 
+  /**
+   * Service call to get hacker News List
+   * @param {*} page
+   * @memberof AppComponent
+   */
   loadData(page) {
     const url = `https://hn.algolia.com/api/v1/search?tags=front_page&page=${page}`;
     this.httpClient.get(url).subscribe((data: any) => {
@@ -40,6 +45,11 @@ export class AppComponent implements OnInit {
     });
   }
 
+  /**
+   * Method to Hide a selected record
+   * @param {*} rowIndex
+   * @memberof AppComponent
+   */
   hideRow(rowIndex){
     this.hackerList.splice(rowIndex,1);
     localStorage.setItem('hackNewsList', JSON.stringify(this.hackerList));
@@ -55,6 +65,10 @@ export class AppComponent implements OnInit {
     }
   }
 
+  /**
+   * Get Chart data display
+   * @memberof AppComponent
+   */
   getMapData(){
     this.lineChartLabels = [];
     this.voteCounts = [];
@@ -99,9 +113,26 @@ export class AppComponent implements OnInit {
 
   }
 
+  /**
+   * Method to Up Vote
+   * @param {*} selectedRow
+   * @memberof AppComponent
+   */
   upVote(selectedRow){
     this.hackerList[selectedRow].points = this.hackerList[selectedRow].points + 1;
     localStorage.setItem('hackNewsList', JSON.stringify(this.hackerList));
     this.getMapData();
+  }
+
+  /**
+   * Method to get difference in hours
+   * @param {*} created_at
+   * @returns
+   * @memberof AppComponent
+   */
+  calculateDiffHours(created_at) {
+    var diff = (new Date(created_at).getTime() - new Date().getTime()) / 1000;
+    diff /= (60 * 60);
+    return Math.abs(Math.round(diff));
   }
 }
