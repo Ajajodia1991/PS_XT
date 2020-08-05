@@ -32,7 +32,7 @@ export class AppComponent implements OnInit {
   }
 
   loadData(page) {
-    const url = `http://hn.algolia.com/api/v1/search?tags=front_page&page=${page}`;
+    const url = `https://hn.algolia.com/api/v1/search?tags=front_page&page=${page}`;
     this.httpClient.get(url).subscribe((data: any) => {
       this.hackerList = data && data.hits;
       localStorage.setItem('hackNewsList', JSON.stringify(this.hackerList));
