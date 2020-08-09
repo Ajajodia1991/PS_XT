@@ -1,7 +1,8 @@
-import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ChartDataSets, ChartOptions, Chart } from 'chart.js';
 import { Color } from 'ng2-charts';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -23,12 +24,16 @@ export class AppComponent implements OnInit {
   public lineChartLabels = [];
   voteCounts: any = [];
   public Linechart;  
+  mySubscription: any;
 
   constructor(private httpClient: HttpClient,
-    private elementRef: ElementRef) { }
+    private elementRef: ElementRef,
+    private router: Router) { }
 
   ngOnInit(): void {
+    if(!sessionStorage.getItem('hackNewsList')){
     this.loadData(this.pageNum);
+    }
   }
 
   /**
@@ -40,7 +45,7 @@ export class AppComponent implements OnInit {
     const url = `https://hn.algolia.com/api/v1/search?tags=front_page&page=${page}`;
     this.httpClient.get(url).subscribe((data: any) => {
       this.hackerList = data && data.hits;
-      localStorage.setItem('hackNewsList', JSON.stringify(this.hackerList));
+      sessionStorage.setItem('hackNewsList', JSON.stringify(this.hackerList));
       this.getMapData();
     });
   }
@@ -52,16 +57,19 @@ export class AppComponent implements OnInit {
    */
   hideRow(rowIndex){
     this.hackerList.splice(rowIndex,1);
-    localStorage.setItem('hackNewsList', JSON.stringify(this.hackerList));
+    sessionStorage.setItem('hackNewsList', JSON.stringify(this.hackerList));
     this.getMapData();
   }
 
   loadPage(page: number) {
     this.lineChartLabels = [];
     this.voteCounts = [];
-    if (page !== this.previousPage) {
+    if (page !== this.previousPage && !sessionStorage.getItem('hackNewsList')) { 
       this.previousPage = page;
       this.loadData(this.previousPage-1);
+    } else {
+      this.hackerList = JSON.parse(sessionStorage.getItem('hackNewsList'));
+      this.getMapData();
     }
   }
 
@@ -120,7 +128,7 @@ export class AppComponent implements OnInit {
    */
   upVote(selectedRow){
     this.hackerList[selectedRow].points = this.hackerList[selectedRow].points + 1;
-    localStorage.setItem('hackNewsList', JSON.stringify(this.hackerList));
+    sessionStorage.setItem('hackNewsList', JSON.stringify(this.hackerList));
     this.getMapData();
   }
 
