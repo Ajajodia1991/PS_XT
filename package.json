@@ -37,7 +37,7 @@
     "@types/jquery": "^3.5.1",
     "@types/node": "~8.9.4",
     "@ng-bootstrap/ng-bootstrap": "~4.2.2",
-    "chart.js": "~2.9.3",
+    "chart.js": "~2.9.4",
     "ng2-charts": "~2.2.3",
     "codelyzer": "~4.5.0",
     "jasmine-core": "~2.99.1",
